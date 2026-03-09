@@ -57,7 +57,7 @@ export default function Navbar() {
       <div className="flex w-full items-center px-6 py-4">
         <div className="flex-1">
           <Link
-            href="/feed"
+            href="/"
             className="text-2xl font-bold tracking-tight text-gray-900 hover:text-black transition"
           >
             Lynkerr
