@@ -36,7 +36,7 @@ export default function Navbar() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setIsLoggedIn(false);
-    router.push("/login");
+    router.push("/");
   };
 
   const handleSearchSubmit = (e) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function CreateListingPage() {
@@ -9,12 +9,18 @@ export default function CreateListingPage() {
   const [formData, setFormData] = useState({
     title: "",
     location: "",
-    imageUrl: "",
     description: "",
     price: "",
   });
 
+  const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const previewUrl = useMemo(() => {
+    if (!imageFile) return "";
+    return URL.createObjectURL(imageFile);
+  }, [imageFile]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -23,8 +29,35 @@ export default function CreateListingPage() {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    setImageFile(file);
+    setError("");
+  };
+
+  const uploadImageToCloudinary = async (file) => {
+    const base64 = await fileToBase64(file);
+
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image: base64 }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Image upload failed");
+    }
+
+    return data.url;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     const token = localStorage.getItem("token");
 
@@ -33,7 +66,16 @@ export default function CreateListingPage() {
       return;
     }
 
+    if (!imageFile) {
+      setError("Please upload an image");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
+      const uploadedImageUrl = await uploadImageToCloudinary(imageFile);
+
       const res = await fetch("/api/listings/create", {
         method: "POST",
         headers: {
@@ -42,6 +84,7 @@ export default function CreateListingPage() {
         },
         body: JSON.stringify({
           ...formData,
+          imageUrl: uploadedImageUrl,
           price: formData.price ? Number(formData.price) : null,
         }),
       });
@@ -50,28 +93,35 @@ export default function CreateListingPage() {
 
       if (!res.ok) {
         setError(data.message || "Failed to create listing");
+        setIsSubmitting(false);
         return;
       }
 
       router.push("/feed");
-    } catch {
-      setError("Something went wrong");
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="w-full max-w-md bg-white shadow-md rounded-2xl p-6 border border-gray-200">
-        <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">Create Travel Experience</h1>
+    <main className="min-h-screen bg-gray-100 p-6">
+      <div className="mx-auto w-full max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-md">
+        <h1 className="mb-2 text-center text-2xl font-bold text-gray-900">
+          Create Travel Experience
+        </h1>
+        <p className="mb-6 text-center text-sm text-gray-600">
+          Upload a cover image and share your travel experience.
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
           <input
             name="title"
             placeholder="Experience Title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
             required
           />
 
@@ -80,25 +130,45 @@ export default function CreateListingPage() {
             placeholder="Location"
             value={formData.location}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
             required
           />
 
-          <input
-            name="imageUrl"
-            placeholder="Image URL"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
-            required
-          />
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+            <label className="mb-2 block text-sm font-medium text-gray-800">
+              Upload Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-700 file:mr-4 file:rounded-lg file:border-0 file:bg-black file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:opacity-90"
+              required
+            />
+            <p className="mt-2 text-xs text-gray-500">
+              Upload one cover image for your listing.
+            </p>
+          </div>
+
+          {previewUrl && (
+            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+              <div className="border-b border-gray-100 px-4 py-3">
+                <p className="text-sm font-medium text-gray-800">Image Preview</p>
+              </div>
+              <img
+                src={previewUrl}
+                alt="Listing preview"
+                className="h-64 w-full object-cover"
+              />
+            </div>
+          )}
 
           <textarea
             name="description"
             placeholder="Description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
             rows="4"
             required
           />
@@ -108,20 +178,31 @@ export default function CreateListingPage() {
             placeholder="Price (optional)"
             value={formData.price}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
           />
 
-          {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-black text-white rounded-lg px-4 py-3 hover:opacity-90"
+            disabled={isSubmitting}
+            className="w-full rounded-lg bg-black px-4 py-3 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Create Listing
+            {isSubmitting ? "Creating Listing..." : "Create Listing"}
           </button>
-
         </form>
       </div>
     </main>
   );
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+  });
 }

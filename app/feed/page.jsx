@@ -35,12 +35,34 @@ export default async function FeedPage({ searchParams }) {
 
   return (
     <main className="min-h-screen bg-gray-100 px-4 py-8 sm:px-6">
+        <section className="relative mb-10 overflow-hidden rounded-3xl">
+            <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{
+                backgroundImage:
+                    "url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80')",
+                }}
+            />
+
+            <div className="absolute inset-0 bg-black/50" />
+
+            <div className="relative px-8 py-14 text-center text-white sm:px-12">
+                <h1 className="text-3xl font-bold sm:text-4xl">
+                Explore Travel Experiences
+                </h1>
+
+                <p className="mx-auto mt-3 max-w-2xl text-sm text-white/85 sm:text-base">
+                Discover unforgettable adventures shared by travelers and hosts
+                around the world.
+                </p>
+            </div>
+            </section>
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Travel Experiences
-            </h1>
+            <h2 className="text-2xl font-semibold text-gray-900 sm:text-3xl">
+                Latest Experiences
+            </h2>
             <p className="mt-2 text-sm text-gray-600 sm:text-base">
               Discover unique local adventures shared by travelers and hosts.
             </p>
