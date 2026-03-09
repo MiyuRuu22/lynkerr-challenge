@@ -17,13 +17,25 @@ async function getListings() {
   return res.json();
 }
 
-export default async function FeedPage() {
+export default async function FeedPage({ searchParams }) {
+  const { q = "" } = await searchParams;
+
   const data = await getListings();
   const listings = data.listings;
 
+  const query = q.toLowerCase().trim();
+
+  const filteredListings = query
+    ? listings.filter((listing) => {
+        const title = listing.title?.toLowerCase() || "";
+        const location = listing.location?.toLowerCase() || "";
+        return title.includes(query) || location.includes(query);
+      })
+    : listings;
+
   return (
     <main className="min-h-screen bg-gray-100 px-4 py-8 sm:px-6">
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
@@ -32,6 +44,19 @@ export default async function FeedPage() {
             <p className="mt-2 text-sm text-gray-600 sm:text-base">
               Discover unique local adventures shared by travelers and hosts.
             </p>
+          </div>
+
+          <div className="text-sm text-gray-500">
+            {query ? (
+              <>
+                {filteredListings.length} experience
+                {filteredListings.length !== 1 ? "s" : ""} found
+                {" for "}
+                <span className="font-medium text-gray-700">"{q}"</span>
+              </>
+            ) : (
+              <span>Browse all experiences</span>
+            )}
           </div>
         </div>
 
@@ -50,9 +75,24 @@ export default async function FeedPage() {
               Create Listing
             </Link>
           </div>
+        ) : filteredListings.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-900">
+              No matching experiences
+            </h2>
+            <p className="mt-2 text-gray-600">
+              Try a different title or location search.
+            </p>
+            <Link
+              href="/feed"
+              className="mt-5 inline-block rounded-lg bg-black px-5 py-3 text-sm font-medium text-white hover:opacity-90"
+            >
+              Clear Search
+            </Link>
+          </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {listings.map((listing) => (
+            {filteredListings.map((listing) => (
               <Link
                 key={listing._id}
                 href={`/listing/${listing._id}`}
