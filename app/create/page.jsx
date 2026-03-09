@@ -61,10 +61,8 @@ export default function CreateListingPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-md p-6">
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          Create Travel Experience
-        </h1>
+      <div className="w-full max-w-md bg-white shadow-md rounded-2xl p-6 border border-gray-200">
+        <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">Create Travel Experience</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
@@ -73,7 +71,7 @@ export default function CreateListingPage() {
             placeholder="Experience Title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
             required
           />
 
@@ -82,7 +80,7 @@ export default function CreateListingPage() {
             placeholder="Location"
             value={formData.location}
             onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
             required
           />
 
@@ -91,7 +89,7 @@ export default function CreateListingPage() {
             placeholder="Image URL"
             value={formData.imageUrl}
             onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
             required
           />
 
@@ -100,7 +98,7 @@ export default function CreateListingPage() {
             placeholder="Description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
             rows="4"
             required
           />
@@ -110,7 +108,7 @@ export default function CreateListingPage() {
             placeholder="Price (optional)"
             value={formData.price}
             onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
           />
 
           {error && <p className="text-red-500">{error}</p>}
