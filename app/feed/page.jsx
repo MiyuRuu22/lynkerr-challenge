@@ -50,8 +50,7 @@ export default async function FeedPage({ searchParams }) {
             {query ? (
               <>
                 {filteredListings.length} experience
-                {filteredListings.length !== 1 ? "s" : ""} found
-                {" for "}
+                {filteredListings.length !== 1 ? "s" : ""} found for{" "}
                 <span className="font-medium text-gray-700">"{q}"</span>
               </>
             ) : (
@@ -116,21 +115,58 @@ export default async function FeedPage({ searchParams }) {
                     {listing.title}
                   </h2>
 
-                  <p className="mb-3 text-sm font-medium text-gray-500">
-                    📍 {listing.location}
-                  </p>
+                  <div className="mb-3 flex items-center gap-2 text-sm font-medium text-gray-500">
+                    <svg
+                      className="h-[15px] w-[15px] flex-shrink-0 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z" />
+                      <circle cx="12" cy="11" r="2.5" />
+                    </svg>
+                    <span className="leading-none">{listing.location}</span>
+                  </div>
 
                   <p className="mb-4 line-clamp-3 text-sm leading-6 text-gray-700">
                     {listing.description}
                   </p>
 
                   <div className="border-t border-gray-100 pt-4 text-sm text-gray-500">
-                    <p className="font-medium text-gray-700">
-                      By {listing.creatorName}
-                    </p>
-                    <p className="mt-1">
-                      {new Date(listing.createdAt).toLocaleString()}
-                    </p>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <svg
+                        className="h-[15px] w-[15px] flex-shrink-0 text-gray-500"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M20 21a8 8 0 0 0-16 0" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                      <span className="font-medium leading-none">
+                        {listing.creatorName}
+                      </span>
+                    </div>
+
+                    <div className="mt-3 flex items-center gap-2">
+                      <svg
+                        className="h-[15px] w-[15px] flex-shrink-0 text-gray-500"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                      </svg>
+                      <span className="leading-none">
+                        {new Date(listing.createdAt).toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </Link>

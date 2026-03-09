@@ -64,9 +64,9 @@ export default function Navbar() {
         {/* CENTER */}
         <div className="flex w-full max-w-xl justify-center">
           <form onSubmit={handleSearchSubmit} className="w-full">
-            <div className="flex items-center rounded-xl border border-gray-300 bg-gray-50 px-3 py-2 shadow-sm transition focus-within:border-black focus-within:bg-white focus-within:shadow">
+            <div className="flex h-10 items-center rounded-xl border border-gray-300 bg-gray-50 px-3 shadow-sm transition focus-within:border-black focus-within:bg-white focus-within:shadow">
               <svg
-                className="mr-2 h-4 w-4 text-gray-400"
+                className="mr-2 h-[18px] w-[18px] text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -79,10 +79,31 @@ export default function Navbar() {
               <input
                 type="text"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by title or location"
-                className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSearch(value);
+
+                  if (!value.trim()) {
+                    router.push("/feed");
+                  } else {
+                    router.push(`/feed?q=${encodeURIComponent(value)}`);
+                  }
+                }}
+                placeholder="Search experiences or locations"
+                className="w-full bg-transparent text-sm leading-none text-gray-900 outline-none placeholder:text-gray-400"
               />
+            {search && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  router.push("/feed");
+                }}
+                className="ml-2 text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            )}
             </div>
           </form>
         </div>
