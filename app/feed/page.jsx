@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { headers } from "next/headers";
+import FeedSearchBar from "@/components/FeedSearchBar";
 
 async function getListings() {
   const headersList = await headers();
@@ -43,7 +44,7 @@ export default async function FeedPage({ searchParams }) {
                     "url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80')",
                 }}
             />
-
+            
             <div className="absolute inset-0 bg-black/50" />
 
             <div className="relative px-8 py-14 text-center text-white sm:px-12">
@@ -57,6 +58,9 @@ export default async function FeedPage({ searchParams }) {
                 </p>
             </div>
             </section>
+
+            <FeedSearchBar />
+            
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
