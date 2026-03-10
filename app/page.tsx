@@ -1,5 +1,6 @@
 import Link from "next/link";
 import StartSharingButton from "@/components/StartSharingButton";
+import RegisterCTAButton from "@/components/RegisterCTAButton";
 
 export default function HomePage() {
   return (
@@ -144,12 +145,9 @@ export default function HomePage() {
             >
               Browse Feed
             </Link>
-            <Link
-              href="/register"
-              className="rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
-            >
-              Register
-            </Link>
+            
+            <RegisterCTAButton />
+            
           </div>
         </div>
       </section>
