@@ -1,4 +1,5 @@
 import SaveButton from "@/components/SaveButton";
+import DeleteListingButton from "@/components/DeleteListingButton";
 
 async function getListing(id) {
   const res = await fetch(`http://localhost:3000/api/listings/${id}`, {
@@ -36,14 +37,20 @@ export default async function ListingPage({ params }) {
             <p className="text-xl font-semibold mb-4 text-gray-900">${listing.price}</p>
           )}
 
-          <div className="flex items-center justify-between text-sm text-gray-500">
+          <div className="mt-6 flex items-center justify-between text-sm text-gray-500">
             <div>
                 <p>Created by {listing.creatorName}</p>
                 <p>{new Date(listing.createdAt).toLocaleString()}</p>
             </div>
 
-            <SaveButton listingId={listing._id.toString()} />
+            <div className="flex gap-3">
+                <SaveButton listingId={listing._id.toString()} />
+                <DeleteListingButton
+                listingId={listing._id.toString()}
+                creatorId={listing.creatorId}
+                />
             </div>
+          </div>
         </div>
       </div>
     </main>
