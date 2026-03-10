@@ -4,6 +4,11 @@ const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String,
+
+  savedListings: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Listing" }
+  ],
+
   createdAt: { type: Date, default: Date.now },
 });
 

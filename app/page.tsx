@@ -1,4 +1,5 @@
 import Link from "next/link";
+import StartSharingButton from "@/components/StartSharingButton";
 
 export default function HomePage() {
   return (
@@ -37,12 +38,8 @@ export default function HomePage() {
                 Explore Experiences
               </Link>
 
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20"
-              >
-                Start Sharing
-              </Link>
+              <StartSharingButton />
+              
             </div>
           </div>
         </div>

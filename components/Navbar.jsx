@@ -12,7 +12,7 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [search, setSearch] = useState(searchParams.get("q") || "");
 
-  const showSearch = pathname !== "/";
+  const showSearch = pathname === "/feed" || pathname === "/saved";
 
   useEffect(() => {
     const checkAuth = () => {
@@ -125,6 +125,11 @@ export default function Navbar() {
               <Link href="/create" className="font-medium text-gray-700 hover:text-black">
                 Create
               </Link>
+
+              <Link href="/saved" className="font-medium text-gray-700 hover:text-black">
+                Saved
+              </Link>
+              
               <button
                 onClick={handleLogout}
                 className="rounded-lg bg-black px-4 py-2 text-white hover:opacity-90"
