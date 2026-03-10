@@ -44,7 +44,7 @@ export default async function ListingPage({ params }) {
                 <p>{new Date(listing.createdAt).toLocaleString()}</p>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex items-center gap-3">
                 <SaveButton listingId={listing._id.toString()} />
                 <EditListingButton
                     listingId={listing._id.toString()}

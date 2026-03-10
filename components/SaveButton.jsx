@@ -70,11 +70,11 @@ export default function SaveButton({ listingId }) {
 
   return (
     <button
-      onClick={handleToggleSave}
-      disabled={loading}
-      className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        onClick={handleToggleSave}
+        disabled={loading}
+        className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {loading ? "Please wait..." : saved ? "Saved" : "Save"}
+        {loading ? "Saving..." : saved ? "Saved" : "Save"}
     </button>
   );
 }

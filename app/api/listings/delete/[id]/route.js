@@ -6,7 +6,7 @@ export async function DELETE(req, context) {
   try {
     await connectDB();
 
-    const { id } = context.params;
+    const { id } = await context.params;
 
     const authHeader = req.headers.get("authorization");
 
@@ -20,7 +20,6 @@ export async function DELETE(req, context) {
     const token = authHeader.split(" ")[1];
 
     let decoded;
-
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch {
@@ -52,12 +51,13 @@ export async function DELETE(req, context) {
       JSON.stringify({ message: "Listing deleted successfully" }),
       { status: 200 }
     );
-
   } catch (error) {
     console.error("DELETE LISTING ERROR:", error);
-
     return new Response(
-      JSON.stringify({ message: "Internal server error" }),
+      JSON.stringify({
+        message: "Internal server error",
+        error: error.message,
+      }),
       { status: 500 }
     );
   }
