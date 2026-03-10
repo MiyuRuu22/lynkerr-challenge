@@ -1,5 +1,6 @@
 import SaveButton from "@/components/SaveButton";
 import DeleteListingButton from "@/components/DeleteListingButton";
+import EditListingButton from "@/components/EditListingButton";
 
 async function getListing(id) {
   const res = await fetch(`http://localhost:3000/api/listings/${id}`, {
@@ -45,9 +46,13 @@ export default async function ListingPage({ params }) {
 
             <div className="flex gap-3">
                 <SaveButton listingId={listing._id.toString()} />
+                <EditListingButton
+                    listingId={listing._id.toString()}
+                    creatorId={listing.creatorId}
+                />
                 <DeleteListingButton
-                listingId={listing._id.toString()}
-                creatorId={listing.creatorId}
+                    listingId={listing._id.toString()}
+                    creatorId={listing.creatorId}
                 />
             </div>
           </div>
